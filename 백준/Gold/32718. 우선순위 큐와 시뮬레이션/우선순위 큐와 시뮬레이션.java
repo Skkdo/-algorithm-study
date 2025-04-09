@@ -11,46 +11,39 @@ public class Main {
         int K = Integer.parseInt(st.nextToken());
         int T = Integer.parseInt(st.nextToken());
 
-        List<Integer> indexList = new ArrayList<>();
-        boolean[] check = new boolean[K];
+        Set<Integer> set = new HashSet<>();
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
             int input = Integer.parseInt(st.nextToken());
             int num = input % K;
-            if (!check[num]) {
-                check[num] = true;       // 나머지 분포 표시
-                indexList.add(num);      // 인덱스 저장
-            }
+            set.add(num);
         }
+
+        List<Integer> indexList = new ArrayList<>(set);
         Collections.sort(indexList);
 
         st = new StringTokenizer(br.readLine());
 
-        int max = K - 1;        // 나머지의 최댓값
-        int flag = K - 1;       // 나머지가 최댓값 일 때의 check 인덱스를 표시
+        int max = K - 1;
+        int flag = K - 1;
+
         for (int i = 0; i < T; i++) {
-            int query = Integer.parseInt(st.nextToken());
-            query %= K;
+            int query = Integer.parseInt(st.nextToken()) % K;
 
-            flag -= query;      // 더해지는 값만큼 flag 를 왼쪽으로 옮김
-            if (flag < 0) {
-                flag += K;
-            }
+            flag = (flag - query + K) % K;
 
-            int find = Collections.binarySearch(indexList, flag);      // flag 왼쪽으로 가장 가까운 인덱스 찾기
+            int find = Collections.binarySearch(indexList, flag);
             if (find < 0) {
                 find = -(find + 1) - 1;
                 if (find == -1) {
                     find = indexList.size() - 1;
                 }
             }
+
             int index = indexList.get(find);
-            int distance = flag - index;
-            if (distance < 0) {
-                distance += K;
-            }
-            sb.append(max - distance).append(" ");      // max 에서 flag 와 떨어진 거리만큼 빼면 최댓값
+            int distance = (flag - index + K) % K;
+            sb.append(max - distance).append(" ");
         }
         System.out.println(sb);
     }
