@@ -1,6 +1,6 @@
 # [level 2] 재구매가 일어난 상품과 회원 리스트 구하기 - 131536 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/131536) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/131536?language=oracle) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@ Empty
 
 ### 제출 일자
 
-2025년 06월 03일 14:05:23
+2025년 06월 04일 12:37:01
 
 ### 문제 설명
 
