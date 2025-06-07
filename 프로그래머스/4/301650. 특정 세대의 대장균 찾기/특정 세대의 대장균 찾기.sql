@@ -1,0 +1,30 @@
+WITH RECURSIVE GENERATION_TREE AS (
+    SELECT
+        ID,
+        PARENT_ID,
+        1 AS GENERATION
+    FROM
+        ECOLI_DATA
+    WHERE
+        PARENT_ID IS NULL
+    
+    UNION ALL
+    
+    SELECT
+        n.ID,
+        n.PARENT_ID,
+        t.GENERATION + 1 AS GENERATION
+    FROM
+        ECOLI_DATA n
+    JOIN
+        GENERATION_TREE t ON n.PARENT_ID = t.ID
+)
+
+SELECT 
+    ID
+FROM 
+    GENERATION_TREE
+WHERE 
+    GENERATION = 3
+ORDER BY ID
+
