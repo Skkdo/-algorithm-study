@@ -1,0 +1,20 @@
+SELECT
+    b.CATEGORY,
+    SUM(SALES) AS TOTAL_SALES
+FROM
+   (SELECT
+        BOOK_ID,
+        SUM(SALES) AS SALES
+    FROM
+        BOOK_SALES
+    WHERE
+        SALES_DATE BETWEEN TO_DATE('2022-01-01','yyyy-mm-dd') AND TO_DATE('2022-01-31','yyyy-mm-dd')
+    GROUP BY
+        BOOK_ID
+   ) s
+JOIN
+    BOOK b ON s.BOOK_ID = b.BOOK_ID
+GROUP BY
+    b.CATEGORY
+ORDER BY
+    CATEGORY
