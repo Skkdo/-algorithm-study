@@ -1,23 +1,28 @@
+import java.util.*;
+
 class Solution {
     public int[] solution(int brown, int yellow) {
         int[] answer = new int[2];
+        int total = brown + yellow;
         
-        
-        for(int i=1;i<=Math.sqrt(yellow);i++){
-            if(yellow%i!=0) continue;
-            int yellowX = i;
-            int yellowY = yellow/i;
+        for(int i = 3; i <= Math.sqrt(total); i++) {
+            if(total % i != 0) continue;
             
-            int temp = (yellowX+2)*2+yellowY*2;
-            if(temp==brown){
-                int x = yellowX+2;
-                int y = yellowY+2;
-                answer[0] = Math.max(x,y);
-                answer[1] = Math.min(x,y);
-            }
+            int w = Math.max(i, total / i);
+            int h = Math.min(i, total / i);
             
+            if(!check(brown, yellow, w, h)) continue;
+            
+            answer[0] = w;  
+            answer[1] = h;
+            break;
         }
-            
         return answer;
+    }
+    
+    public boolean check(int brown, int yellow, int w, int h) {
+        if((w + h - 2) * 2 != brown) return false;
+        if((w - 2) * (h - 2) != yellow) return false;
+        return true;
     }
 }
