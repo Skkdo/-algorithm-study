@@ -1,48 +1,62 @@
 import java.util.*;
 
 class Solution {
-    static boolean[] check;
+    
+    public class Group {
+        boolean[] check;
+        int count;
+        
+        public Group(int size) {
+            this.check = new boolean[size + 1];
+            this.count = 0;
+        }
+        
+        public void add(int n) {
+            this.check[n] = true;
+            this.count++;
+        }
+        
+        public boolean grouping(int[] wires) {
+            int wire1 = wires[0];
+            int wire2 = wires[1];
+            
+            if(check[wire1] || check[wire2]) {
+                this.check[wire1] = true;
+                this.check[wire2] = true;
+                this.count++;
+                return true;
+            }
+            return false;
+        }
+    }
     
     public int solution(int n, int[][] wires) {
-        int answer = 0;
-        int min = n;
-        ArrayList<Integer>[] arr = new ArrayList[n+1];
+            int min = Integer.MAX_VALUE;
         
-        for(int i=0;i<n+1;i++){
-            arr[i] = new ArrayList<Integer>();
-        }
-        
-        for(int i=0;i<n-1;i++){
-            arr[wires[i][0]].add(wires[i][1]);
-            arr[wires[i][1]].add(wires[i][0]);
-        }
-        
-        for(int i=0;i<n-1;i++){
-            int temp=0;
-            check = new boolean[n+1];
-            check[wires[i][1]] = true;
-            check[wires[i][0]] = true;
-            temp = DFS(arr,wires[i][0],0);
-            temp = Math.abs(n-temp-temp);
-            if(min>temp){
-                min = temp;
+            for(int cut = 0; cut < wires.length; cut++) {
+                Group g1 = new Group(n);
+                Group g2 = new Group(n);
+                g1.add(wires[cut][0]);
+                g2.add(wires[cut][1]);
+            
+                Queue<int[]> q = new LinkedList<>();
+            
+                for(int i = 0; i < wires.length; i++) {
+                    if(i == cut) continue;
+                
+                    if(g1.grouping(wires[i])) continue;
+                    if(g2.grouping(wires[i])) continue;
+                    q.add(wires[i]);
+                }
+            
+                while(!q.isEmpty()) {
+                    int[] wire = q.poll();
+                    if(g1.grouping(wire)) continue;
+                    if(g2.grouping(wire)) continue;
+                    q.add(wire);
+                }
+                min = Math.min(Math.abs(g1.count - g2.count), min);
             }
-        }
-        
         return min;
-    }
-    public static int DFS(ArrayList<Integer>[] arr,int index,int count){
-        count++;
-        for(int i=0;i<arr[index].size();i++){
-            if(check[arr[index].get(i)]){
-                continue;
-            }
-            check[arr[index].get(i)] =true;
-            count = DFS(arr,arr[index].get(i),count);
-        }
-        return count;
-    }
-    
-    
-    
+    } 
 }
