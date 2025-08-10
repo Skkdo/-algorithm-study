@@ -1,31 +1,22 @@
+import java.util.*;
+
 class Solution {
     public int solution(int[][] triangle) {
-        int height = triangle.length;
-        
-        for(int i=1;i<height;i++){
-            plus(triangle[i-1],triangle[i]);
+        for(int i = 0; i < triangle.length - 1; i++) {
+            int[] plus = new int[triangle[i + 1].length];
+            
+            for(int j = 0; j < triangle[i].length; j++) {
+                plus[j] = Math.max(triangle[i][j], plus[j]);
+                plus[j + 1] = Math.max(triangle[i][j], plus[j + 1]);
+            }
+            
+            for(int j = 0; j < triangle[i + 1].length; j++) {
+                triangle[i + 1][j] += plus[j];
+            }
         }
         
-        return findMax(triangle[height-1]);
-    }
-    
-    private static void plus(int[] top, int[] bottom){
-        int top_first = top[0];
-        int top_last = top[top.length-1];
-        bottom[0] += top_first;
-        bottom[bottom.length-1] += top_last;
-        
-        for(int i=1;i<bottom.length-1;i++){
-             int bigger = (top[i-1] > top[i])? top[i-1] : top[i];
-             bottom[i] += bigger;
-        }
-    }
-    
-    private static int findMax(int[] array){
-        int max = array[0];
-        for(int i =1;i<array.length;i++){
-            max = (max > array[i])? max : array[i];
-        }
+        int max = 0;
+        for(int num : triangle[triangle.length - 1]) max = Math.max(num, max);
         return max;
     }
 }
